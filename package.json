@@ -28,7 +28,7 @@
     "jshint-stylish": "^2.0.0"
   },
   "dependencies": {
-    "nsp": "^2.6.2",
+    "nsp": "^3.0.0",
     "request": "^2.51.0"
   },
   "engines": {
