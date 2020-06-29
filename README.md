@@ -6,9 +6,55 @@ Tabletop.js easily integrates Google Spreadsheets with templating systems and an
 
 [![Build Status](https://travis-ci.org/jsoma/tabletop.svg?branch=master)](https://travis-ci.org/jsoma/tabletop)
 
+## But wait, don't use Tabletop!!!!
+
+Tabletop was created in about 1995, back when we had to remember to disable call waiting when dialing into Compuserve. **Now that it's 2020, Google is shutting down the infrastructure that Tabletop relies on.**
+
+[Big surprise, right?](https://killedbygoogle.com/) But luckily, it's pretty easy to switch to a more modern way of doing things!
+
+Instead of Tabletop, we're going to use [Papa Parse](https://www.papaparse.com/). You still need to share your spreadsheet and all of that (see below), but the changes are actually pretty tiny! I've added a file where you can see [a full example of doing it](examples/simple/no-tabletop.html), but the quick version is:
+
+**Old Tabletop style**
+
+```js
+function init() {
+  Tabletop.init( { key: 'https://docs.google.com/spreadsheets/d/0AmYzu_s7QHsmdDNZUzRlYldnWTZCLXdrMXlYQzVxSFE/pubhtml',
+                    callback: function(data, tabletop) { 
+                      console.log(data)
+                    },
+                    simpleSheet: true } )
+}
+window.addEventListener('DOMContentLoaded', init)
+```
+
+**Updated version**
+
+```js
+function init() {
+          Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv', {
+          download: true,
+          header: true,
+          complete: function(results) {
+            var data = results.data
+            console.log(data)
+          }
+        })
+window.addEventListener('DOMContentLoaded', init)
+```
+
+One important note is **this won't work with Publish to Web if you have an organizational account.** Like if I use my `@columbia.edu` account Google pretends I'm a terrible criminal and won't give me access via Papa Parse.
+
+This also won't work if you're opening up an html file on your computer like a Normal Person, it requires you to either put it on the internet or run a local server. There are worse things, I guess.
+
+But hey, as of September 2020 it's this way or the highway!
+
+> Google broke some MORE stuff, so you just plan might not be able to do this any more. If it's a PRIVATE project, you can get an API key and [jump through a few hoops](https://github.com/jsoma/tabletop/issues/189). But beware that this [exposes your API key to anyone visiting the site](https://github.com/jsoma/tabletop/issues/187#issuecomment-650942492), which allows people to do whatever they want with your data and run up bills on your end, so you probably don't want this on something facing the world.
+
+## But let's pretend Tabletop isn't leaving
+
 ### Like how easy?
 
-**Step One:** make a Google Spreadsheet and "Publish to Web." It doesn't matter what publishing method you pick.
+**Step One:** make a Google Spreadsheet and "Publish to Web." You'll need to pick CSV to be forwards-compatible for when Google shuts down the old way of doing things.
 
 **Step Two:** Write a page that invokes Tabletop with the published URL Google gives you.
 
